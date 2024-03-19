@@ -1,24 +1,53 @@
-import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
+    const [name,setName]=useState("")
+    const [users,setUsers]=useState([])
+    
+  const PostData=()=>{
+    axios.post('https://6585240b022766bcb8c7f1a0.mockapi.io/users',{
+      name:name,
+      age:27,
+      hobbies:["cooking","travelling","coding","gardening"],
+    })
+    .then((res)=>{
+      console.log(res.data)
+    })
+    .catch((err)=>{
+      console.err(err)
+    }
+    )
+  }
+
+  //get method
+
+  useEffect(()=>{
+    axios.get('https://6585240b022766bcb8c7f1a0.mockapi.io/users')
+    .then((res)=>{
+      setUsers(res.data)
+    })
+    .catch((err)=>{
+      console.err(err)
+    }
+    )
+
+  },[])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <input  placeholder='Name' onChange={ (event)=>setName(event.target.value)}/>
+<button onClick={PostData}>PostData</button>
+{
+  users.map((user)=>{
+return(<>
+    <h2>{user.name}</h2>
+</>)
+  })
+}
+
+          </div>
   );
 }
 
